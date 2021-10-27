@@ -17,8 +17,10 @@ app.get('/', (req, res) => {
   res.send('Welcome to mini url!')
 })
 
+// localhost:3000/randomKeyPath
+// localhost:3000/nbzi98uadf7y7
 app.get('/*', (req, res) => {
-  res.send('get and redirect other route')
+  res.send('get and redirect to another site')
 })
 
 app.listen(port, () => {
