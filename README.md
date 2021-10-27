@@ -1,0 +1,2 @@
+# miniUrl
+minimize url
