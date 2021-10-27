@@ -6,11 +6,12 @@ const mongodbService = require('./service/mongodb/mongodbService.js')
 
 app.get('/list', (req, res) => {
   const list = mongodbService.listAll()
-  console.log(list)
-  res.send('list all')
+  // console.log(list)
+  // res.send('list all')
+  res.send(list)
 })
 app.get('/save', (req, res) => {
-  mongodbService.save('www.article.com')
+  mongodbService.save('www.article2.com')
   res.send('save')
 })
 app.get('/', (req, res) => {
