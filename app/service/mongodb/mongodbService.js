@@ -15,6 +15,6 @@ module.exports = {
         newPair.save()
     },
     get(key){
-
+        return Pair.findOne({key})
     }
 }
