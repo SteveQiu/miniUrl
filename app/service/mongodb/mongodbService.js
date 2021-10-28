@@ -1,8 +1,9 @@
+var base64 = require('base-64');
 const mongoose = require('mongoose');
 const Pair = require('./schema/Pair');
-const hashGenerator = require('./hashGenerator.js');
-// main().catch(err => console.log(err));
-var serverPos=0, serverCount=0
+const Counter = require('./schema/Counter');
+const counterService = require('./counterService.js');
+
 
 mongoose.connect('mongodb://localhost:27017/miniUrl');
 
@@ -10,20 +11,23 @@ module.exports = {
     listAll(){
         return Pair.find();
     },
-    save(url){
+    async save(url){
         console.log(mongoose.connection.readyState);
-        console.log("Generated Hash:")
-        // hashKey = null
-        hashKey = hashGenerator.generateHash(url);
-        (async () => {Pair.findOne({key: hashKey}).then(function(doc){
-            if(doc != null){
-                console.log("Hash already exists");
-                console.log("doc", Object.keys(doc).length, doc);
-                hashKey = hashGenerator.generateHash(url+"_"+Math.random());
-            }   
-                // const newPair = new Pair({key:hashKey, value:url})
-                // newPair.save()
-        });})();
+        console.log("Starting save process:");
+        try {
+            let counter = await Counter.findOne({key: "counter"}).exec();
+            const newPair = new Pair({key: counter.value, value:url})
+            newPair.save()
+            counterService.updateCounter(counter.value)
+        } catch (error) {
+            console.log("Error while saving with counter:", error);
+        }
+    },
+    decodeStringToKey(string) {
+        return base64.decode(string);
+    },
+    encodeKeyToString(key) {
+        return base64.encode(key);
     },
     get(key){
         return Pair.findOne({key})
