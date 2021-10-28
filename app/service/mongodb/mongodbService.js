@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Pair = require('./schema/Pair');
 const hashGenerator = require('./hashGenerator.js');
 // main().catch(err => console.log(err));
+var serverPos=0, serverCount=0
 
 mongoose.connect('mongodb://localhost:27017/miniUrl');
 
@@ -26,5 +27,13 @@ module.exports = {
     },
     get(key){
         return Pair.findOne({key})
+    },
+    updateSliceIndex(pos, total){
+        console.log(pos,total);
+        if (pos!==serverPos || total !== serverCount) {
+            console.log('recalculate index');
+            serverPos=pos
+            serverCount=total
+        }
     }
 }

@@ -4,7 +4,9 @@
   "description": "minimize url",
   "main": "index.js",
   "scripts": {
-    "start": "node app/app.js",
+    "balancer": "nodemon loadbalancer/app.js",
+    "url": "nodemon app/app.js",
+    "start": "MINIURL_PORT=3000 node app/app.js",
     "dev": "nodemon app/app.js",
     "test": "exit 1",
     "ls": "autocannon http://localhost:3000/list -d 5",
@@ -22,6 +24,7 @@
   },
   "homepage": "https://github.com/SteveQiu/miniUrl#readme",
   "dependencies": {
+    "axios": "^0.24.0",
     "body-parser": "^1.19.0",
     "crypto-js": "^4.1.1",
     "express": "^4.17.1",
