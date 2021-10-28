@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.MINIURL_PORT || 0
 const mongodbService = require('./service/mongodb/mongodbService.js')
+app.use(express.json())
 const HTTP_REGEX=/^(http|https):\/\//i
 const HeartBeatService = require('./service/headbeat/headbeat')
 
