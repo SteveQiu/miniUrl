@@ -1,6 +1,7 @@
 const http = require('http');
 const https = require('https');
 var data;
+var hostPort;
 const options = {
     host: 'localhost',
     port: 3000,
@@ -10,7 +11,8 @@ const options = {
 };
 
 function config(appListener) {
-    data = JSON.stringify({name:appListener.address().port})
+    hostPort = appListener.address().port
+    data = JSON.stringify({name:hostPort})
     options.headers['Content-Length'] = data.length
 }
 
@@ -21,7 +23,7 @@ function beat(cb) {
         let output = "";
         
         const req = port.request(options, (res) => {
-            console.log(`heart beat ${options.host}:${options.port} ${res.statusCode}`);
+            console.log(`heart beat localhost:${hostPort} ${res.statusCode}`);
             res.setEncoding("utf8");
         
             res.on("data", (chunk) => {output += chunk;});
