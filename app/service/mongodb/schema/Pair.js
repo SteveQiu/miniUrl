@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const pairSchema = new mongoose.Schema({
     key: String,
     value: String,
-});
+}, { shardKey: { key: 8 }} );
 
 pairSchema.methods.toString = function toString() {
     const key = this.key;

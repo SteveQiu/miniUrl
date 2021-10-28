@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 app.get('/*', async (req, res) => {
   // mongodbService.get(req)
   const token = req.url.substr(1)
-  console.log(token);
+
   var pair;
   try {
     pair = await mongodbService.get(token).exec()
