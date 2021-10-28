@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 0
 const mongodbService = require('./service/mongodb/mongodbService.js')
 const HTTP_REGEX=/^(http|https):\/\//i
 
@@ -44,6 +44,6 @@ app.get('/*', async (req, res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+const listener = app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${listener.address().port}`)
 })
