@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const mongodbService = require('./service/mongodb/mongodbService.js')
+app.use(express.json())
 const HTTP_REGEX=/^(http|https):\/\//i
 
 app.get('/list', async (req, res) => {
