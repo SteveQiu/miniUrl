@@ -7,7 +7,6 @@ mongoose.connect('mongodb://localhost:27017/miniUrl');
 
 module.exports = {
     listAll(){
-        console.log(mongoose.connection.readyState);
         return Pair.find();
     },
     save(url){
@@ -26,6 +25,6 @@ module.exports = {
         });})();
     },
     get(key){
-
+        return Pair.findOne({key})
     }
 }

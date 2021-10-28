@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node app/app.js",
     "dev": "nodemon app/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "exit 1",
+    "ls": "autocannon http://localhost:3000/list -d 5",
+    "go": "autocannon http://localhost:3000/z -d 5 ",
+    "save": "autocannon http://localhost:3000/save -i test/load/url.json -d 5"
   },
   "repository": {
     "type": "git",
@@ -24,5 +27,8 @@
     "express": "^4.17.1",
     "mongoose": "^6.0.12",
     "nodemon": "^2.0.14"
+  },
+  "devDependencies": {
+    "autocannon": "^7.5.0"
   }
 }
