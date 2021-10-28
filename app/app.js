@@ -15,7 +15,7 @@ app.get('/list', async (req, res) => {
   }
   res.send(list)
 })
-app.get('/save', (req, res) => {
+app.post('/save', (req, res) => {
   mongodbService.save('www.article.com')
   res.send('save')
 })
@@ -23,15 +23,39 @@ app.get('/', (req, res) => {
   res.send('Welcome to mini url!')
 })
 
-app.get('/*', async (req, res) => {
-  // mongodbService.get(req)
-  const token = req.url.substr(1)
+app.get('/j/*', async (req, res) => {
+  const token = req.url.substr(3)
+  console.log(token);
+  var pair;
+  try {
+    pair = await mongodbService.get(token).exec()
+    console.log(pair);
+  } catch (error) {
+    console.error(error);
+    res.json(null)
+  }
+  if(pair){
+    console.log('found');
+    let url = pair.value
+    console.log(url);
+    if (!HTTP_REGEX.test(url)) {
+      url='http://'+url
+    }
+    res.json({url})
+  } else {
+    console.log('not found');
+    res.json(null)
+  }
+})
 
+app.get('/*', async (req, res) => {
+  const token = req.url.substr(1)
   var pair;
   try {
     pair = await mongodbService.get(token).exec()
   } catch (error) {
-    res.send(error)
+    console.error(error);
+    res.send(null)
   }
   if(pair){
     let url = pair.value
