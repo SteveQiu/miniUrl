@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
-const port = 0
+const port = process.env.MINIURL_PORT || 0
 const mongodbService = require('./service/mongodb/mongodbService.js')
 const HTTP_REGEX=/^(http|https):\/\//i
+const HeartBeatService = require('./service/headbeat/headbeat')
 
 app.get('/list', async (req, res) => {
   var list
@@ -21,8 +22,6 @@ app.get('/', (req, res) => {
   res.send('Welcome to mini url!')
 })
 
-// localhost:3000/randomKeyPath
-// localhost:3000/nbzi98uadf7y7
 app.get('/*', async (req, res) => {
   // mongodbService.get(req)
   const token = req.url.substr(1)
@@ -47,3 +46,12 @@ app.get('/*', async (req, res) => {
 const listener = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${listener.address().port}`)
 })
+
+if (listener.address().port !== 3000) {
+  HeartBeatService.config(listener)
+  setInterval(() => {
+    HeartBeatService.beat(function(res) {
+      mongodbService.updateSliceIndex(res.pos, res.total)
+    })
+  },1000)
+}
