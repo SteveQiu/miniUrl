@@ -9,7 +9,7 @@
     "test": "exit 1",
     "ls": "autocannon http://localhost:3000/list -d 5",
     "go": "autocannon http://localhost:3000/z -d 5 ",
-    "save": "autocannon http://localhost:3000/save -i test/load/url.json -d 1 -R 1"
+    "save": "autocannon http://localhost:3000/save -i test/load/url.json -d 5"
   },
   "repository": {
     "type": "git",

@@ -14,7 +14,6 @@ app.get('/list', async (req, res) => {
   res.send(list)
 })
 app.get('/save', (req, res) => {
-  console.log(req);
   mongodbService.save('www.article.com')
   res.send('save')
 })
