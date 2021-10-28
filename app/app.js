@@ -15,9 +15,11 @@ app.get('/list', async (req, res) => {
   }
   res.send(list)
 })
-app.post('/save', (req, res) => {
-  mongodbService.save('www.article.com')
-  res.send('save')
+app.post('/save', async (req, res) => {
+  if (!(req.body && req.body.url)) {res.send(null)}
+
+  let url = await mongodbService.save(req.body.url)
+  res.json({url})
 })
 app.get('/', (req, res) => {
   res.send('Welcome to mini url!')

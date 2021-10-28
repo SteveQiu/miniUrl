@@ -7,7 +7,7 @@
     "balancer": "nodemon loadbalancer/app.js",
     "url": "nodemon app/app.js",
     "start": "MINIURL_PORT=3000 node app/app.js",
-    "dev": "nodemon app/app.js",
+    "dev": "MINIURL_PORT=3000 nodemon app/app.js",
     "test": "exit 1",
     "ls": "autocannon http://localhost:3000/list -d 5",
     "go": "autocannon http://localhost:3000/z -d 5 ",
