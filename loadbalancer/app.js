@@ -56,16 +56,15 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/*', async (req, res) => {
-  Promise.allSettled([...registeredApp.map(serverInfo=>{
+  Promise.race([...registeredApp.map(serverInfo=>{
     let redirectUrl = `${serverInfo.name}/j${req.path}`
     return axios.get(redirectUrl)
-  })]).then(urlObjs=>{
-    for (const obj of urlObjs) {
-      if (obj.value && obj.value.data && obj.value.data.url) {
-        return res.redirect(307, obj.value.data.url)
-        
+  })]).then(obj=>{
+      if (obj.data && obj.data.url) {
+        return res.redirect(307, obj.data.url)
       }
-    }
+      return res.send('not found')
+  }).catch(()=>{
     return res.send('not found')
   })
 })

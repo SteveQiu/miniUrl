@@ -51,8 +51,6 @@ app.get('/*', async (req, res) => {
   try {
     pair = await mongodbService.get(token)
   } catch (error) {
-    console.log('an error');
-    // console.error(error);
     return res.send(null)
   }
   if(pair){
