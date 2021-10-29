@@ -4,7 +4,7 @@ const Pair = require('./schema/Pair');
 const Counter = require('./schema/Counter');
 const counterService = require('./counterService.js');
 let serverPos = 0, serverCount=0, start=0, end;
-
+const START_TIME=1635469615883
 
 mongoose.connect('mongodb://localhost:27017/miniUrl');
 
@@ -15,10 +15,16 @@ module.exports = {
     async save(url){
         try {
             let counter = await Counter.findOne({key: "counter"}).exec();
-            const newPair = new Pair({key: counter.value, value:url})
+            let time = (new Date().getTime()-START_TIME ) *1000 + Math.floor(Math.random()*1000)
+            const key = this.encodeKeyToString(time);
+            const newPair = new Pair({
+                hash: counter.value, 
+                key: key,
+                value:url
+            })
             newPair.save()
             counterService.updateCounter(counter.value)
-            return this.encodeKeyToString(counter.value)
+            return key
         } catch (error) {
             console.log("Error while saving with counter:", error);
         }
@@ -35,19 +41,23 @@ module.exports = {
         return base64.encode(key);
     },
     get(key){
-        let num = this.decodeStringToKey(key)
-        if(!num) return Promise.resolve(null)
         if(end){
-            return Pair.findOne({key: {
-                $eq: num,
-                $lt:end,
-                $gt:start,
-            }}).exec()
+            return Pair.findOne({
+                hash: {
+                    $lt:end,
+                    $gte:start,
+                },
+                key,
+            }).exec()
+        } else if(start>0) {
+            return Pair.findOne({
+                hash: {
+                    $gte:start,
+                },
+                key,
+            }).exec()
         } else {
-            return Pair.findOne({key: {
-                $gte:start,
-                $eq: num,
-            }}).exec()
+            return Pair.findOne({key}).exec()
         }
     },
     async updateSliceIndex(pos, total){

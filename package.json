@@ -9,9 +9,9 @@
     "start": "MINIURL_PORT=3000 node app/app.js",
     "dev": "MINIURL_PORT=3000 nodemon app/app.js",
     "test": "exit 1",
-    "ls": "autocannon http://localhost:3000/list -d 5",
-    "go": "autocannon http://localhost:3000/z -d 1",
-    "save": "autocannon http://localhost:3000/save -m POST -H content-type=application/json -b '{\"url\":\"www.google.ca\"}' -d 10"
+    "ls": "autocannon http://localhost:3000/list -d 3",
+    "go": "autocannon http://localhost:3000/OTc3MjY1ODMy -d 3",
+    "save": "autocannon http://localhost:3000/save -m POST -H content-type=application/json -b '{\"url\":\"www.google.ca\"}' -d 5"
   },
   "repository": {
     "type": "git",

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const pairSchema = new mongoose.Schema({
+    hash: Number,
     key: String,
     value: String,
-}, { shardKey: { key: 8 }} );
+}, { shardKey: { hash: 4, key: 1 }} );
 
 pairSchema.methods.toString = function toString() {
     const key = this.key;
