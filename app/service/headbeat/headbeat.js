@@ -23,7 +23,6 @@ function beat(cb) {
         let output = "";
         
         const req = port.request(options, (res) => {
-            console.log(`heart beat localhost:${hostPort} ${res.statusCode}`);
             res.setEncoding("utf8");
         
             res.on("data", (chunk) => {output += chunk;});

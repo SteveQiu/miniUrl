@@ -13,7 +13,6 @@ module.exports = {
         return Pair.find();
     },
     async save(url){
-        console.log("Starting save process:");
         try {
             let counter = await Counter.findOne({key: "counter"}).exec();
             const newPair = new Pair({key: counter.value, value:url})
@@ -26,34 +25,46 @@ module.exports = {
         return null
     },
     decodeStringToKey(string) {
-        return base64.decode(string);
+        try {
+            return base64.decode(string);
+        } catch (error) {
+            return null
+        }
     },
     encodeKeyToString(key) {
         return base64.encode(key);
     },
     get(key){
-        let query = Pair.findOne({key: this.decodeStringToKey(key)}).where('key').gt(start)
+        let num = this.decodeStringToKey(key)
+        if(!num) return Promise.resolve(null)
         if(end){
-            return query.lt(end)
+            return Pair.findOne({key: {
+                $eq: num,
+                $lt:end,
+                $gt:start,
+            }}).exec()
         } else {
-            return query
+            return Pair.findOne({key: {
+                $gte:start,
+                $eq: num,
+            }}).exec()
         }
     },
     async updateSliceIndex(pos, total){
-        console.log(pos,total);
-        if (!(pos==serverPos && total == serverCount)) return
+        if (pos==serverPos && total == serverCount) return
 
         serverPos=pos
         serverCount=total
-
+        
         const counter = await Counter.findOne({key: "counter"}).exec();
         const pairCount = counter.value
-
+        
         start = Math.floor( pairCount / serverCount * serverPos)
-        if(serverPos != serverCount){
+        if(serverPos != serverCount-1){
             end = Math.ceil(pairCount/serverCount*(serverPos+1 ))
         } else {
             end = null
         }
+        console.log(`updating slice index position ${start} ~ ${end} `);
     }
 }

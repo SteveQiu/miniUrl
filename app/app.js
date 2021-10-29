@@ -11,42 +11,37 @@ app.get('/list', async (req, res) => {
   try {
     list = await mongodbService.listAll().exec()
   } catch (error) {
-    res.send(error)
+    return res.send(error)
   }
-  res.send(list)
+  return res.send(list)
 })
 app.post('/save', async (req, res) => {
-  if (!(req.body && req.body.url)) {res.send(null)}
+  if (!(req.body && req.body.url)) {return res.send(null)}
 
   let url = await mongodbService.save(req.body.url)
-  res.json({url})
+  return res.json({url})
 })
 app.get('/', (req, res) => {
-  res.send('Welcome to mini url!')
+  return res.send('Welcome to mini url!')
 })
 
 app.get('/j/*', async (req, res) => {
   const token = req.url.substr(3)
-  console.log(token);
   var pair;
   try {
-    pair = await mongodbService.get(token).exec()
-    console.log(pair);
+    pair = await mongodbService.get(token)
   } catch (error) {
     console.error(error);
-    res.json(null)
+    return res.json(null)
   }
   if(pair){
-    console.log('found');
     let url = pair.value
-    console.log(url);
     if (!HTTP_REGEX.test(url)) {
       url='http://'+url
     }
-    res.json({url})
+    return res.json({url})
   } else {
-    console.log('not found');
-    res.json(null)
+    return res.json(null)
   }
 })
 
@@ -54,19 +49,20 @@ app.get('/*', async (req, res) => {
   const token = req.url.substr(1)
   var pair;
   try {
-    pair = await mongodbService.get(token).exec()
+    pair = await mongodbService.get(token)
   } catch (error) {
-    console.error(error);
-    res.send(null)
+    console.log('an error');
+    // console.error(error);
+    return res.send(null)
   }
   if(pair){
     let url = pair.value
     if (!HTTP_REGEX.test(url)) {
       url='http://'+url
     }
-    res.redirect(url)
+    return res.redirect(url)
   } else {
-    res.send('invalid url')
+    return res.send('invalid url')
   }
 })
 
