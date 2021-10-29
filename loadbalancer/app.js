@@ -52,7 +52,14 @@ app.get('/list', async (req, res) => {
 app.get('/', async (req, res) => {
   let pos = Math.floor(Math.random()*100000000)%registeredApp.length
   let redirectUrl = registeredApp[pos].name+req.path
-  res.redirect(307, redirectUrl);
+
+  try {
+    let r = await axios.get(redirectUrl, req.body)
+    res.send(r.data)
+  } catch (error) {
+    console.error(error);
+    res.send('error')
+  }
 })
 
 app.get('/*', async (req, res) => {
@@ -70,6 +77,7 @@ app.get('/*', async (req, res) => {
 })
 
 app.post('/*', async (req, res) => {
+  console.log(req.body);
   let pos = Math.floor(Math.random()*100000000)%registeredApp.length
   let redirectUrl = registeredApp[pos].name+req.path
   try {

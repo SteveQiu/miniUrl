@@ -5,6 +5,7 @@ const mongodbService = require('./service/mongodb/mongodbService.js')
 app.use(express.json())
 const HTTP_REGEX=/^(http|https):\/\//i
 const HeartBeatService = require('./service/headbeat/headbeat')
+const path = require('path')
 
 app.get('/list', async (req, res) => {
   var list
@@ -22,7 +23,7 @@ app.post('/save', async (req, res) => {
   return res.json({url})
 })
 app.get('/', (req, res) => {
-  return res.send('Welcome to mini url!')
+  res.sendFile(path.join(__dirname+'/index.html'));
 })
 
 app.get('/j/*', async (req, res) => {
