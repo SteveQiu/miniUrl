@@ -19,6 +19,7 @@
         $('form').on('submit',(e)=>{
             e.preventDefault();
             let url = $('input[name=url]').val();
+            console.log(url);
             // let data = new FormData();
             // data.append('url',url);
             axios.post('save',{url})
