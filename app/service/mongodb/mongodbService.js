@@ -4,7 +4,6 @@ const Pair = require('./schema/Pair');
 const Counter = require('./schema/Counter');
 const counterService = require('./counterService.js');
 let serverPos = 0, serverCount=0, start=0, end;
-const START_TIME=1635469615883
 
 mongoose.connect('mongodb://localhost:27017/miniUrl');
 
@@ -15,7 +14,7 @@ module.exports = {
     async save(url){
         try {
             let counter = await Counter.findOne({key: "counter"}).exec();
-            let time = (new Date().getTime()-START_TIME ) *1000 + Math.floor(Math.random()*1000)
+            let time = (counter) *1000000 + Math.floor(Math.random()*1000000)
             const key = this.encodeKeyToString(time);
             const newPair = new Pair({
                 hash: counter.value, 
@@ -29,13 +28,6 @@ module.exports = {
             console.log("Error while saving with counter:", error);
         }
         return null
-    },
-    decodeStringToKey(string) {
-        try {
-            return base64.decode(string);
-        } catch (error) {
-            return null
-        }
     },
     encodeKeyToString(key) {
         return base64.encode(key);
