@@ -14,7 +14,7 @@ module.exports = {
     async save(url){
         try {
             let counter = await Counter.findOne({key: "counter"}).exec();
-            let time = (counter) *1000000 + Math.floor(Math.random()*1000000)
+            let time = (counter.value) *1000000 + Math.floor(Math.random()*1000000)
             const key = this.encodeKeyToString(time);
             const newPair = new Pair({
                 hash: counter.value, 
